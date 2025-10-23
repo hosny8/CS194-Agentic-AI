@@ -1,0 +1,33 @@
+[
+  {
+    "alert_id": "RISK-2025-089",
+    "severity": "HIGH",
+    "category": "weather",
+    "timestamp": "2025-10-20T14:15:00Z",
+    "title": "Hurricane Category 3 - Gulf of Mexico",
+    "affected_regions": ["Gulf of Mexico", "Houston", "Miami", "Gulf Coast"],
+    "description": "Major hurricane approaching. Expected landfall Oct 24. All Gulf shipping lanes at risk.",
+    "recommended_action": "Delay departures or reroute via Atlantic routes"
+  },
+  {
+    "alert_id": "RISK-2025-091",
+    "severity": "CRITICAL",
+    "category": "port_congestion",
+    "timestamp": "2025-10-20T08:00:00Z",
+    "title": "Severe Port Congestion - Shanghai",
+    "affected_regions": ["Shanghai Port", "East China Sea"],
+    "description": "Port operations at 150% capacity. Average delay: 5-7 days for all vessels.",
+    "recommended_action": "Consider rerouting to Ningbo or Qingdao ports"
+  },
+  {
+    "alert_id": "RISK-2025-087",
+    "severity": "MEDIUM",
+    "category": "geopolitical",
+    "timestamp": "2025-10-19T22:30:00Z",
+    "title": "Suez Canal Disruption Concerns",
+    "affected_regions": ["Suez Canal", "Red Sea", "Mediterranean"],
+    "description": "Escalating tensions may affect canal transit. Monitor situation closely.",
+    "recommended_action": "Prepare contingency routes via Cape of Good Hope"
+  }
+]
+

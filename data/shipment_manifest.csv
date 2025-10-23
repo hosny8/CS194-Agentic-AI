@@ -1,0 +1,7 @@
+shipment_id,commodity,quantity,unit,origin,destination,vessel,departure_date,eta,status,value_usd
+SHP-2025-1042,Crude Oil WTI,50000,barrels,Shanghai,Los Angeles,MV OCEAN STAR,2025-10-15,2025-10-27,DELAYED,3925000
+SHP-2025-1098,Copper Concentrate,10000,metric_tons,Valparaiso,Rotterdam,MV ATLANTIC RUNNER,2025-10-20,2025-11-10,IN_TRANSIT,41500000
+SHP-2025-1055,Natural Gas LNG,25000,MMBtu,Qatar,Tokyo,MV GAS PRINCE,2025-10-18,2025-10-28,IN_TRANSIT,80000
+SHP-2025-1087,Soybeans,15000,metric_tons,Santos Brazil,Hamburg,MV GRAIN MASTER,2025-10-19,2025-11-05,IN_TRANSIT,6750000
+SHP-2025-1103,Iron Ore,30000,metric_tons,Perth,Shanghai,MV BULK TITAN,2025-10-21,2025-11-02,SCHEDULED,2700000
+

@@ -1,0 +1,31 @@
+[
+  {
+    "id": "email_001",
+    "subject": "URGENT: Port Congestion at Shanghai - Oil Shipment Delayed",
+    "from": "logistics@globalshipping.com",
+    "timestamp": "2025-10-20T08:30:00Z",
+    "body": "Dear Operations Team,\n\nWe regret to inform you that vessel MV OCEAN STAR carrying 50,000 barrels of crude oil (Shipment ID: SHP-2025-1042) is experiencing delays at Shanghai Port due to severe congestion. Original ETA was Oct 22, now estimated Oct 27 (+5 days).\n\nCargo: Crude Oil, WTI Grade\nQuantity: 50,000 barrels\nCurrent Location: Shanghai Port Anchorage\nDestination: Los Angeles\n\nPlease advise on rerouting options.\n\nBest regards,\nGlobal Shipping Logistics"
+  },
+  {
+    "id": "email_002",
+    "subject": "Weather Alert: Hurricane approaching Gulf of Mexico",
+    "from": "risk@weathermonitor.com",
+    "timestamp": "2025-10-20T14:15:00Z",
+    "body": "WEATHER ADVISORY\n\nHurricane category 3 is approaching the Gulf of Mexico. Expected landfall: Oct 24.\n\nAffected Routes:\n- Houston to Miami shipping lane\n- All Gulf Coast terminals\n\nRecommendation: Delay departures or reroute via Atlantic.\n\nRisk Level: HIGH"
+  },
+  {
+    "id": "email_003",
+    "subject": "Commodity Price Update - Oct 20",
+    "from": "market@tradingdesk.com",
+    "timestamp": "2025-10-20T09:00:00Z",
+    "body": "Daily Market Update\n\nCrude Oil (WTI): $78.50/barrel (+2.3% due to Middle East tensions)\nNatural Gas: $3.20/MMBtu (-0.5%)\nCopper: $4.15/lb (+1.1%)\n\nGeopolitical Risk: Elevated due to Suez Canal disruption concerns.\n\nMarket Sentiment: Bullish on oil, neutral on metals."
+  },
+  {
+    "id": "email_004",
+    "subject": "Shipment Confirmation - Copper from Chile",
+    "from": "dispatch@mineralsltd.com",
+    "timestamp": "2025-10-19T16:45:00Z",
+    "body": "Shipment Details:\n\nID: SHP-2025-1098\nCommodity: Copper Concentrate\nQuantity: 10,000 metric tons\nOrigin: Valparaiso, Chile\nDestination: Rotterdam, Netherlands\nDeparture: Oct 20, 2025\nETA: Nov 10, 2025\nVessel: MV ATLANTIC RUNNER\n\nAll documentation complete. Tracking available."
+  }
+]
+

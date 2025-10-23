@@ -1,0 +1,9 @@
+# CTAE-Green Requirements
+# For basic demo (standalone mode)
+agentbeats>=1.0.0
+
+# Optional: For full A2A integration
+# requests>=2.31.0
+# fastapi>=0.104.0
+# uvicorn>=0.24.0
+
