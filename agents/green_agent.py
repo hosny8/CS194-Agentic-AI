@@ -339,13 +339,17 @@ Please provide your analysis in the following JSON format:
         return report
 
 # Mock white agent response function for demo purposes
-def mock_white_agent_response(scenario_prompt: str) -> Dict[str, Any]:
+def mock_white_agent_response(scenario_prompt: str, agent_quality: str = "strong") -> Dict[str, Any]:
     """
     Simulates a white agent response for demo purposes.
     In production, this would be an actual A2A call to the white agent.
+    
+    Args:
+        scenario_prompt: The scenario description
+        agent_quality: "strong", "weak", or "moderate" for different performance levels
     """
     # Simple mock - extracts some keywords and generates basic response
-    if "SHP-2025-1042" in scenario_prompt:
+    if "SHP-2025-1042" in scenario_prompt and agent_quality == "strong":
         return {
             "extracted_data": {
                 "shipment_ids": ["SHP-2025-1042"],
