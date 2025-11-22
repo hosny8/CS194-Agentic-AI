@@ -196,14 +196,17 @@ async def reset():
 
 
 if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    
     print("\n" + "=" * 60)
     print("CTAE-GREEN AGENT A2A SERVER")
     print("=" * 60)
-    print("\nStarting server on http://localhost:8000")
-    print("Agent card: http://localhost:8000/agent-card")
-    print("Task endpoint: http://localhost:8000/task")
-    print("Reset endpoint: http://localhost:8000/reset")
+    print(f"\nStarting server on port {port}")
+    print(f"Agent card: /agent-card")
+    print(f"Task endpoint: /task")
+    print(f"Reset endpoint: /reset")
     print("\n" + "=" * 60 + "\n")
     
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
 

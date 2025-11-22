@@ -1,312 +1,435 @@
 # CTAE-Green: Commodity Trade Agent Evaluation
 
-**Evaluating Multi-Agent Reasoning in Commodity Trade Operations**
+A green agent benchmark for evaluating AI agents on commodity trade operations requiring cross-modal reasoning under operational constraints.
+
+## Repository Information
+
+- **Repository**: https://github.com/hosny8/CS194-Agentic-AI
+- **Branch**: `main`
+- **Status**: Public
 
 ## Overview
 
-CTAE-Green is a benchmarking and evaluation agent designed to assess multi-agent performance in complex, data-driven decision environments such as commodity trade logistics and risk management. The Green Agent acts as an orchestrator and judge, simulating realistic trading workflows involving logistics updates, risk alerts, and coordination tasks.
+CTAE-Green evaluates white agents on their ability to:
+- Extract structured data from unstructured logistics emails and CSV manifests
+- Link causal event chains across data sources (e.g., port delay → shipment impact → financial risk)
+- Assess risk severity and identify affected assets
+- Generate actionable recommendations under time pressure (30-45 seconds)
 
-## What This Benchmark Tests
+The green agent scores white agents across four metrics:
+- **Data Extraction Accuracy (30%)**: F1 score of extracted facts
+- **Risk Reasoning Quality (35%)**: Correctness of risk identification and severity
+- **Recommendation Coherence (25%)**: Actionability and rationale clarity
+- **Response Time (10%)**: Speed under operational constraints
 
-### Task Description
-The CTAE-Green Agent evaluates how well "white agents" handle reasoning in simulated commodity trade operations:
+---
 
-- **Environment**: Streams of logistics emails, shipment updates, market news, and risk alerts
-- **Agent Capabilities**: Extract key details, link related events, suggest actions (e.g., rerouting cargo)
-- **Evaluation Metrics**:
-  - **Data Extraction Accuracy** (30%): Precision/recall of extracted facts from unstructured data
-  - **Risk Reasoning Quality** (35%): Correctness of risk identification and severity assessment
-  - **Recommendation Coherence** (25%): Actionability and clarity of suggestions
-  - **Response Time** (10%): Speed of analysis
+## Installation
 
-### Why This Matters
+### Prerequisites
+- Python 3.11+
+- pip
 
-Existing benchmarks (τ-bench, BrowserGym, SWE-bench) assess reasoning and task automation but lack real-world data interdependencies typical in enterprise domains. CTAE-Green extends these by introducing:
+### Setup
 
-- **Cross-modal evaluation**: Unstructured emails + structured CSVs + real-time alerts
-- **Causal reasoning assessment**: Linking events across data sources (e.g., port delay → shipment impact → financial exposure)
-- **Collaborative coordination tests**: Multi-agent scenarios requiring information synthesis
+```bash
+# Clone repository
+git clone https://github.com/hosny8/CS194-Agentic-AI.git
+cd CS194-Agentic-AI/ctae-green
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+---
+
+## Usage
+
+### 1. List Available Agents and Scenarios
+
+View all registered white agents and evaluation scenarios:
+
+```bash
+python3 launcher.py list
+```
+
+**Output**: Lists 3 white agents (Strong Analyst, Weak Extractor, Moderate Analyst) and 3 scenarios with descriptions.
+
+---
+
+### 2. Run Green Agent to Evaluate White Agents
+
+#### Full Evaluation (All Agents × All Scenarios)
+
+```bash
+python3 launcher.py launch
+```
+
+**What it does:**
+- Evaluates all 3 white agents on all 3 scenarios (9 total evaluations)
+- Generates leaderboard with comparative rankings
+- Displays aggregate performance metrics
+
+**Expected Results:**
+- Strong Analyst: ~45/100 (demonstrates strong extraction and reasoning)
+- Weak Extractor: ~27/100 (shows poor performance on details)
+- Moderate Analyst: ~22/100 (mid-level competence)
+
+**Time**: ~10-15 seconds
+
+---
+
+#### Single Agent Evaluation
+
+Evaluate a specific white agent:
+
+```bash
+python3 launcher.py evaluate --agent strong_analyst
+```
+
+**Available agents:**
+- `strong_analyst` - High-quality reasoning and extraction
+- `weak_extractor` - Poor extraction capabilities
+- `moderate_analyst` - Mid-level performance
+
+**Output**: Detailed scores for each scenario with performance tier (EXCELLENT/GOOD/FAIR/NEEDS IMPROVEMENT)
+
+---
+
+#### Specific Scenario Evaluation
+
+Evaluate on specific scenarios only:
+
+```bash
+python3 launcher.py evaluate --agent strong_analyst --scenarios scenario_01 scenario_02
+```
+
+**Available scenarios:**
+- `scenario_01` - Shanghai Port Delay (Medium difficulty)
+- `scenario_02` - Hurricane Risk (Hard difficulty)
+- `scenario_03` - Multi-Risk Assessment (Hard difficulty)
+
+---
+
+### 3. Test Green Agent Evaluation
+
+#### Test Case 1: Strong Performance
+
+Verify green agent correctly scores high-quality responses:
+
+```bash
+python3 launcher.py evaluate --agent strong_analyst --scenarios scenario_01
+```
+
+**Expected Output:**
+```
+  [Step 4/4] Scores:
+            - Data Extraction:     80.0/100
+            - Risk Reasoning:      100.0/100
+            - Recommendations:     83.3/100
+            - Response Time:       100.0/100
+            --------------------------------
+            - OVERALL SCORE:       89.8/100
+            - Performance Tier:    EXCELLENT
+```
+
+**Validation**: Green agent correctly recognizes comprehensive fact extraction, accurate risk assessment, and actionable recommendations.
+
+---
+
+#### Test Case 2: Weak Performance
+
+Verify green agent penalizes poor responses:
+
+```bash
+python3 launcher.py evaluate --agent weak_extractor --scenarios scenario_02
+```
+
+**Expected Output:**
+```
+  [Step 4/4] Scores:
+            - Data Extraction:     0.0/100
+            - Risk Reasoning:      0.0/100
+            - Recommendations:     50.0/100
+            - Response Time:       100.0/100
+            --------------------------------
+            - OVERALL SCORE:       22.5/100
+            - Performance Tier:    NEEDS IMPROVEMENT
+```
+
+**Validation**: Green agent correctly penalizes missing facts and lack of detailed analysis.
+
+---
+
+#### Test Case 3: Comparative Evaluation
+
+Verify green agent differentiates performance levels:
+
+```bash
+python3 launcher.py launch
+```
+
+**Expected Leaderboard:**
+```
+Rank   Agent Name                Overall    Extract    Reason     Recommend 
+----------------------------------------------------------------------
+1      Strong Analyst              44.9/100    26.7/100    33.3/100    61.1/100
+2      Weak Extractor              27.4/100     0.0/100    13.9/100    50.0/100
+3      Moderate Analyst            21.7/100     8.3/100     8.3/100    25.0/100
+```
+
+**Validation**: Green agent produces consistent rankings with clear score differentiation.
+
+---
+
+## Running White Agents
+
+### Mock Agents (Demonstration)
+
+The repository includes 3 mock white agents for demonstration purposes. These are automatically invoked by the launcher and require no separate setup.
+
+**Mock Agent Qualities:**
+- **Strong Analyst**: Excellent extraction, accurate risk assessment, clear recommendations
+- **Weak Extractor**: Misses critical facts, generic analysis
+- **Moderate Analyst**: Decent extraction but underestimates severity
+
+---
+
+### Custom White Agents
+
+To evaluate your own white agent:
+
+1. **Implement A2A Protocol**: Your agent must respond to task requests via HTTP
+2. **Deploy Agent**: Run your agent on a public URL or localhost
+3. **Modify Launcher**: Update `launcher.py` to include your agent:
+
+```python
+self.white_agents["your_agent"] = {
+    "name": "Your Agent Name",
+    "description": "Description",
+    "quality": "custom",
+    "url": "http://your-agent-url:port"
+}
+```
+
+4. **Evaluate**:
+```bash
+python3 launcher.py evaluate --agent your_agent
+```
+
+---
+
+## AgentBeats Platform Integration
+
+### Running as A2A Server
+
+Start the green agent as an HTTP server for AgentBeats platform:
+
+```bash
+cd agents
+python3 green_agent_server.py
+```
+
+**Endpoints:**
+- **GET** `/` - Health check
+- **GET** `/agent-card` - Agent capabilities (A2A protocol)
+- **POST** `/task` - Evaluate white agents
+- **POST** `/reset` - Reset green agent state
+
+**Example API Call:**
+
+```bash
+curl -X POST http://localhost:8000/task \
+  -H "Content-Type: application/json" \
+  -d '{
+    "task": "evaluate_agent",
+    "metadata": {
+      "white_agent_url": "http://localhost:8001",
+      "scenario_id": "scenario_01"
+    }
+  }'
+```
+
+---
+
+### Deploying on AgentBeats
+
+1. **Register Green Agent**:
+   - Agent URL: `http://your-server:8000`
+   - Launcher URL: `http://your-server:9000` (for reset endpoint)
+
+2. **Register White Agents**: Deploy your white agents and register their URLs
+
+3. **Create Battle**: Configure green agent as orchestrator, white agents as participants
+
+4. **Run Evaluation**: Platform will coordinate full evaluation and display results
+
+---
 
 ## Project Structure
 
 ```
 ctae-green/
-├── data/                          # Simulation data
-│   ├── logistics_emails.json     # Logistics updates, delays, news
-│   ├── shipment_manifest.csv     # Active shipments with details
-│   └── risk_alerts.json          # Weather, geopolitical, operational risks
-│
-├── agents/                        # Agent implementations
-│   ├── green_agent_card.toml     # Green Agent configuration
-│   ├── green_agent.py            # Orchestrator/judge implementation
-│   └── white_agent_card.toml     # Example White Agent config
-│
-├── run_demo.sh                    # Quick demo runner
-└── README.md                      # This file
+├── launcher.py              # Main orchestration script
+├── agents/
+│   ├── green_agent.py       # Core evaluation logic
+│   ├── green_agent_server.py # A2A HTTP server
+│   ├── green_agent_card.toml
+│   └── white_agent_card.toml
+├── data/
+│   ├── logistics_emails.json    # 4 logistics emails
+│   ├── shipment_manifest.csv    # 5 shipments ($50M+ portfolio)
+│   └── risk_alerts.json         # 3 risk alerts
+├── requirements.txt
+├── README.md
+├── EVALUATION_FLOW.md      # Detailed metric explanations
+└── USAGE.md                # Extended usage guide
 ```
 
-## Quick Start
-
-### 1. Setup Environment
-
-```bash
-# Ensure you're in the ctae-green directory
-cd /Users/mohamedhosny/cs194-agenticAI/ctae-green
-
-# Create virtual environment (if not already done)
-python3 -m venv ../venv
-source ../venv/bin/activate
-
-# Install dependencies (only agentbeats needed for full A2A integration)
-pip install agentbeats
-```
-
-### 2. Run Demo (Standalone Mode)
-
-For a quick demonstration without full AgentBeats infrastructure:
-
-```bash
-chmod +x run_demo.sh
-./run_demo.sh
-```
-
-This will:
-1. Load 3 evaluation scenarios from the data directory
-2. Simulate white agent responses (mock responses for demo)
-3. Evaluate responses against ground truth
-4. Generate a detailed evaluation report
-
-**Expected Output**: A comprehensive report showing scores for each scenario and aggregate performance.
-
-### 3. View Results
-
-The demo generates `ctae_evaluation_report.txt` with detailed scoring:
-
-```
-SCENARIO 1: Shanghai Port Delay - Oil Shipment Crisis
-SCORES:
-  Data Extraction Accuracy:    95.2/100
-  Risk Reasoning Quality:      88.7/100
-  Recommendation Coherence:    82.5/100
-  Response Time Score:         94.3/100
-  -------------------------------
-  OVERALL SCORE:               89.1/100
-```
+---
 
 ## Evaluation Scenarios
 
 ### Scenario 1: Shanghai Port Delay - Oil Shipment Crisis
 - **Difficulty**: Medium
-- **Focus**: Single-shipment crisis management
-- **Data Sources**: Port delay email, price update, shipment manifest, congestion alert
-- **Key Challenge**: Extract impact of 5-day delay on $3.9M oil shipment
+- **Focus**: Single-event crisis management
+- **Data**: Port delay email, price update, shipment manifest, congestion alert
+- **Challenge**: Extract impact of 5-day delay on $3.9M oil shipment
 
-### Scenario 2: Hurricane Risk - Gulf Operations  
+### Scenario 2: Hurricane Risk - Gulf Operations
 - **Difficulty**: Hard
 - **Focus**: Weather-driven operational disruption
-- **Data Sources**: Hurricane alert, risk bulletin, shipment data
-- **Key Challenge**: Identify at-risk shipments and recommend mitigation
+- **Data**: Hurricane alert, risk bulletin, shipment data
+- **Challenge**: Identify at-risk shipments and recommend mitigation
 
 ### Scenario 3: Multi-Risk Assessment - Global View
 - **Difficulty**: Hard
 - **Focus**: Synthesizing multiple concurrent risks
-- **Data Sources**: All emails, shipments, and risk alerts
-- **Key Challenge**: Prioritize top 3 risks across $50M+ portfolio
+- **Data**: All emails, shipments, and risk alerts
+- **Challenge**: Prioritize top 3 risks across $50M+ portfolio
 
-## How Green Agent Evaluates
+---
+
+## Metrics
 
 ### 1. Data Extraction Accuracy (0-100)
-- Measures F1 score of extracted facts vs. ground truth
-- Critical facts: shipment IDs, quantities, delays, financial values
-- Example: "50,000 barrels", "5-day delay", "SHP-2025-1042"
+- **Method**: F1 score (precision × recall)
+- **Ground Truth**: Pre-defined critical facts per scenario
+- **Example**: "SHP-2025-1042", "50,000 barrels", "$3.9M", "5-day delay"
 
 ### 2. Risk Reasoning Quality (0-100)
-- Risk type identification (weather, port congestion, geopolitical)
-- Severity assessment accuracy (low/medium/high/critical)
-- Affected asset mapping (which shipments/routes impacted)
+- **Method**: Risk type recall + severity accuracy
+- **Ground Truth**: Expected risks with severity levels
+- **Example**: Delay risk (HIGH), Financial risk (MEDIUM)
 
 ### 3. Recommendation Coherence (0-100)
-- Alignment with optimal actions (reroute, delay, notify, hedge)
-- Presence of clear rationale for each recommendation
-- Actionability and specificity
+- **Method**: Action coverage + rationale quality
+- **Ground Truth**: Optimal actions per scenario
+- **Example**: "Reroute to Ningbo port" with clear justification
 
 ### 4. Response Time Score (0-100)
-- Normalized score based on time limit (30-45 seconds per scenario)
-- Simulates operational urgency constraints
+- **Method**: Normalized against time limit (30-45s)
+- **Calculation**: max(0, 100 - (time / limit × 100))
 
-### 5. Overall Score
+### Overall Score
 Weighted average: `0.30×Extraction + 0.35×Reasoning + 0.25×Recommendations + 0.10×Time`
 
-## Integration with AgentBeats Platform
+**Performance Tiers:**
+- EXCELLENT: 80-100
+- GOOD: 60-79
+- FAIR: 40-59
+- NEEDS IMPROVEMENT: <40
 
-To run this with actual A2A agents on the AgentBeats platform:
+---
 
-### Step 1: Deploy White Agent
+## Reproducibility
 
+All evaluations are deterministic:
+- Same white agent response → same scores (100% reproducible)
+- Ground truth is fixed and version-controlled
+- No randomness in scoring functions
+
+**Verification:**
+Run the same evaluation twice and compare outputs:
 ```bash
-cd agents
-
-# Run white agent on port 8001
-agentbeats run white_agent_card.toml \
-    --launcher_host localhost \
-    --launcher_port 9001 \
-    --agent_host localhost \
-    --agent_port 8001 \
-    --model_type openai \
-    --model_name gpt-4o-mini
+python3 launcher.py evaluate --agent strong_analyst --scenarios scenario_01 > run1.txt
+python3 launcher.py evaluate --agent strong_analyst --scenarios scenario_01 > run2.txt
+diff run1.txt run2.txt  # Should be identical
 ```
 
-### Step 2: Deploy Green Agent
-
-```bash
-# Run green agent on port 8000
-agentbeats run green_agent_card.toml \
-    --launcher_host localhost \
-    --launcher_port 9000 \
-    --agent_host localhost \
-    --agent_port 8000 \
-    --model_type openai \
-    --model_name gpt-4o
-```
-
-### Step 3: Register on AgentBeats.org
-
-1. Login to [agentbeats.org](https://agentbeats.org)
-2. Register agents:
-   - **Green Agent**: `http://YOUR_IP:8000` (launcher: port 9000)
-   - **White Agent**: `http://YOUR_IP:8001` (launcher: port 9001)
-3. Create a battle with:
-   - **Green Agent**: CTAE-Green Orchestrator (judge role)
-   - **White Agent**: Your trade analyst agent (participant role)
-
-## Demo Video Script (3 minutes)
-
-### Part 1: Task Introduction (60 seconds)
-
-**Show**: `data/` directory with files
-
-**Narration**: 
-> "CTAE-Green evaluates agents in commodity trade operations. The environment provides three data sources: logistics emails with shipping updates, a CSV manifest tracking active shipments worth $50M+, and real-time risk alerts for weather, port congestion, and geopolitical events. Agents must extract structured data, assess risks, and recommend actions like rerouting cargo or hedging positions."
-
-### Part 2: Demonstration (90 seconds)
-
-**Show**: Terminal running `./run_demo.sh`
-
-**Narration**:
-> "Let's see the Green Agent in action. It loads three scenarios of increasing difficulty. In Scenario 1, a $3.9M oil shipment is delayed 5 days at Shanghai port. The Green Agent sends this scenario to the White Agent, which must extract key facts like the shipment ID, delay duration, and financial impact. The White Agent identifies the delay, assesses it as high-risk, and recommends rerouting to an alternative port. The Green Agent scores this response on four dimensions: data extraction accuracy at 95%, risk reasoning quality at 89%, recommendation coherence at 83%, and response time. The overall score is 89 out of 100—excellent performance."
-
-**Show**: Scroll through evaluation report
-
-**Narration**:
-> "Scenario 2 introduces a Category 3 hurricane threatening Gulf operations. The White Agent must identify which shipments are at risk and suggest immediate mitigation. Scenario 3 tests multi-risk synthesis across all concurrent threats. The final report shows aggregate performance: this White Agent scored 87/100 overall, with strong data extraction but room for improvement in complex recommendation synthesis."
-
-### Part 3: Design Notes (30 seconds)
-
-**Show**: `green_agent.py` code (evaluation functions)
-
-**Narration**:
-> "Test cases are generated from real-world trade patterns: port delays, weather disruptions, and market volatility. Ground truth includes critical facts, expected risks, and optimal actions. The Green Agent uses F1 scoring for extraction, rubric-based evaluation for reasoning, and LLM-as-judge for recommendation quality. This ensures fair, reproducible, and reliable agent assessment in high-stakes decision environments."
-
-## Recording Your Demo
-
-### Option 1: Screen Recording (Recommended)
-
-**Tools**: QuickTime (macOS), OBS Studio, or Loom
-
-1. Open Terminal and position it prominently
-2. Have `README.md` and `data/logistics_emails.json` open in editor
-3. Start recording
-4. Follow the script above:
-   - Show data files (10-15 seconds)
-   - Run `./run_demo.sh` (60 seconds)
-   - Scroll through report (30 seconds)
-   - Show evaluation code (30 seconds)
-5. Add voiceover narration (record separately and overlay if needed)
-
-### Option 2: Edited Video
-
-1. Record terminal session: `asciinema record demo.cast`
-2. Record separate voiceover audio
-3. Use video editor (iMovie, Final Cut, DaVinci Resolve) to combine
-4. Add captions for clarity
-
-### Tips for Great Demo
-- **Keep it concise**: 3 minutes max
-- **Show, don't tell**: Let the code run, show real output
-- **Explain metrics**: Briefly clarify what each score measures
-- **Highlight uniqueness**: Cross-modal data, causal reasoning, operational constraints
-
-## Extending the Benchmark
-
-### Adding New Scenarios
-
-Edit `green_agent.py` in the `load_scenarios()` method:
-
-```python
-scenarios.append({
-    "id": "scenario_04",
-    "name": "Your Scenario Name",
-    "difficulty": "medium",
-    "data": {...},
-    "task": "Your task description",
-    "time_limit": 30
-})
-```
-
-Add corresponding ground truth in `load_ground_truth()`.
-
-### Customizing Metrics
-
-Modify the `evaluate_response()` method to add new scoring dimensions:
-
-```python
-# Example: Add cost optimization metric
-cost_savings = calculate_cost_savings(response)
-scores["cost_optimization"] = cost_savings
-```
-
-### Integrating Real White Agents
-
-Replace `mock_white_agent_response()` with actual A2A calls:
-
-```python
-import requests
-
-def send_to_white_agent(agent_url: str, prompt: str) -> Dict[str, Any]:
-    response = requests.post(
-        f"{agent_url}/task",
-        json={"task": prompt}
-    )
-    return response.json()
-```
+---
 
 ## Troubleshooting
 
-### "File not found" errors
-- Ensure you're running scripts from the `ctae-green/` directory
-- Check that `data/` directory exists with all JSON/CSV files
+### "No module named 'green_agent'"
+Ensure you're in the `ctae-green/` directory:
+```bash
+cd /path/to/CS194-Agentic-AI/ctae-green
+python3 launcher.py list
+```
 
-### Import errors
-- Activate virtual environment: `source ../venv/bin/activate`
-- Install dependencies: `pip install agentbeats`
+### "FileNotFoundError: data/logistics_emails.json"
+The launcher auto-detects data directory. Ensure `data/` exists with all files.
 
-### Empty or incorrect scores
-- Verify ground truth in `green_agent.py` matches your scenarios
-- Check that white agent responses follow the expected JSON format
+### Scores seem incorrect
+Mock agents use simplified logic for demonstration. Scores are correct based on mock responses. Real white agents would produce different scores.
 
-## Team
+---
 
-- **Mohamed**: Green Agent architecture, orchestration logic, evaluation metrics
-- **Matheus**: Data generation, environment setup, demo preparation
+## Development
+
+### Adding New Scenarios
+
+1. Edit `agents/green_agent.py`
+2. Add scenario in `load_scenarios()` method
+3. Add ground truth in `load_ground_truth()` method
+4. Test: `python3 launcher.py evaluate --agent strong_analyst --scenarios your_scenario_id`
+
+### Adding New Metrics
+
+1. Edit `evaluate_response()` in `agents/green_agent.py`
+2. Define scoring logic
+3. Update weight calculation in overall score
+4. Test with mock agents
+
+---
+
+## Citation
+
+If you use CTAE-Green in your research, please cite:
+
+```
+@misc{ctae-green-2025,
+  title={CTAE-Green: Evaluating Multi-Agent Reasoning in Commodity Trade Operations},
+  author={Mohamed Hosny and Matheus [Last Name]},
+  year={2025},
+  url={https://github.com/hosny8/CS194-Agentic-AI}
+}
+```
+
+---
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License
 
-## Contact
+---
 
-For questions or contributions, please open an issue on the repository.
+## Authors
 
+- **Mohamed Hosny** - Green agent architecture, evaluation metrics, AgentBeats integration
+- **Matheus [Last Name]** - Data generation, environment setup, validation testing
 
+---
 
+## Support
 
+For issues or questions:
+- Open an issue on GitHub: https://github.com/hosny8/CS194-Agentic-AI/issues
+- Contact: [your email]
+
+---
+
+## Acknowledgments
+
+Built for CS194 Agentic AI course project. Thanks to the AgentBeats team for the evaluation platform framework.

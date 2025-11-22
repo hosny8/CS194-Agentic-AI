@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: ctae-green-agent
+    env: python
+    region: oregon
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "cd agents && python green_agent_server.py"
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+
