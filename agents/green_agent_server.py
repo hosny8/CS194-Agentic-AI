@@ -4,11 +4,13 @@ Minimal HTTP server for AgentBeats integration
 """
 
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
 import uvicorn
 from green_agent import CTAEGreenAgent, mock_white_agent_response
 import time
+from pathlib import Path
 
 app = FastAPI(title="CTAE-Green Agent", version="1.0.0")
 
@@ -37,8 +39,24 @@ async def startup_event():
     print("✓ CTAE-Green Agent initialized")
 
 
-@app.get("/")
-async def root():
+@app.get("/", response_class=HTMLResponse)
+async def dashboard():
+    """Serve agent dashboard"""
+    dashboard_path = Path(__file__).parent / "templates" / "dashboard.html"
+    if dashboard_path.exists():
+        return dashboard_path.read_text()
+    return """
+    <html>
+        <body style="font-family: sans-serif; padding: 40px; text-align: center;">
+            <h1>CTAE-Green Agent</h1>
+            <p>Dashboard template not found. Server is running.</p>
+            <p><a href="/agent-card">View Agent Card</a> | <a href="/docs">API Documentation</a></p>
+        </body>
+    </html>
+    """
+
+@app.get("/health")
+async def health():
     """Health check endpoint"""
     return {
         "name": "CTAE-Green Agent",
